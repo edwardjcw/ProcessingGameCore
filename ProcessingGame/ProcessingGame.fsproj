@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <LangVersion>6.0</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="ProcessingGameLibrary.fs" />
+    <Compile Include="ProcessingGameInterface.fs" />
+    <Compile Include="EnvironmentBuilder.fs" />
+    <Compile Include="GamePlay.fs" />
+  </ItemGroup>
+
+</Project>
