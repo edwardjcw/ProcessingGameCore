@@ -16,6 +16,5 @@ module EnvironmentBuilder =
             >> (Game.programWithAdo 3)
             >> (fun p -> p.id, p))
         |> Map.ofSeq
-        |> (fun a -> printfn $"{a}"; a)
         
     let sampleEnv = {Game.emptyEnvironment with programs=programs; processors=processors}
