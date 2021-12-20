@@ -113,15 +113,14 @@ module Game =
             
             // transforms ados by ticking if the previous isn't currently in Running status
             let tickAdoProcess power ados =
-                let rec looper powerLeft ados' result = seq{
+                let rec looper powerLeft ados' result =
                     match powerLeft, ados' with
-                    | _, [] -> yield result
-                    | 0, _ -> yield ados'@(result |> List.rev)
+                    | _, [] -> result
+                    | 0, _ -> ados'@(result |> List.rev)
                     | _, f::rest ->
                         let powerLeft', adoStatus' = tickAdo powerLeft f
-                        yield! looper powerLeft' rest (adoStatus'::result)
-                }
-                (looper power ados []) |> Seq.last 
+                        looper powerLeft' rest (adoStatus'::result)
+                looper power ados []
             
             {p with ados = p.ados |> List.rev |> tickAdoProcess p.power}
         
