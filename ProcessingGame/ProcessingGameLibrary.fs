@@ -1,6 +1,5 @@
 ﻿namespace ProcessingGame
 open System
-open System
 
 (*
 Process is a keyword for future use; so "process" is "Ado" in this program
@@ -34,7 +33,7 @@ type Environment = {programs: Map<Guid, Program>;
                     ticks: int}
 type Request =
     | Move of Ado * Processor
-    | Tick of TimeSpan
+    | Tick of int
     | End
 type Result =
     | Success of Environment
@@ -74,7 +73,7 @@ module Game =
             let readyProcessor = maybe {
                 let! cpu = env.processors.TryFind processor.id
                 let! ready = // notice how ready is not optional (that's because of bind)
-                    let hasRoom = cpu.size > (size cpu.ados) + ado.size
+                    let hasRoom = cpu.size >= (size cpu.ados) + ado.size
                     if hasRoom then Some(cpu)
                     else None
                 return ready
@@ -175,18 +174,21 @@ module Game =
             | Some(d), None -> {p with ados=d}
             | _, _ -> p 
         
-        let transform env =
+        let rec transform amount env =
             // this is where you tick by one ... if the process is done, then it leaves
             // the processor if all program's ados are in Waiting status
-            let processors = env.processors |> Map.map tickProcessor
-            let newlyDones =
-                (filteredAdos theWaiters processors) - (filteredAdos theRunners processors) - (filteredAdos theReadies env.programs)
-                |> Set.toList
-            if newlyDones.IsEmpty then Success({env with processors=processors; ticks=env.ticks+1})
+            if amount <= 0 then Success env
             else
-                processors
-                |> Map.map (fun _ p -> if p.ados.IsEmpty then p else transformDones newlyDones p)
-                |> (fun processors' -> Success({env with processors=processors'; ticks=env.ticks+1}))
+                let processors = env.processors |> Map.map tickProcessor
+                let newlyDones =
+                    (filteredAdos theWaiters processors) - (filteredAdos theRunners processors) - (filteredAdos theReadies env.programs)
+                    |> Set.toList
+                let nextEnv = 
+                    if newlyDones.IsEmpty then {env with processors=processors; ticks=env.ticks+1}
+                    else
+                        let processors' = processors |> Map.map (fun _ p -> if p.ados.IsEmpty then p else transformDones newlyDones p)
+                        {env with processors=processors'; ticks=env.ticks+1}
+                transform (amount - 1) nextEnv
     
     // ==== constructors, etc.
     let emptyProgram () =
@@ -214,5 +216,5 @@ module Game =
     let transform request env = 
         match request with
         | Move(ado, processor) -> Move.transform ado processor env 
-        | Tick _ -> Tick.transform env
+        | Tick amount -> Tick.transform amount env
         | End -> Success(env)

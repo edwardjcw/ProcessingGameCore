@@ -37,7 +37,7 @@ module GameInterface =
             match lastOutput with
             | Success(e) -> e
             | Result.Error(p, _) -> failwith(p)
-        Game.transform (Tick (TimeSpan.FromSeconds 1.0)) env
+        Game.transform (Tick 1) env
     
     let play help env (input: MailboxProcessor<MessageRequest>) =
         let rec looper result = async {

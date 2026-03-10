@@ -168,3 +168,48 @@ This project is open source. Please check the repository for licensing informati
 ## Acknowledgments
 
 Built as a demonstration of F# capabilities in game development and process scheduling simulation.
+
+## Web UI (New!)
+
+A new web-based user interface has been added to provide a graphical way to interact with the game. You can drag and drop "Ados" from programs to processors.
+
+### Prerequisites for Web UI
+
+- [Node.js and npm](https://nodejs.org/en/)
+
+### Running the Web Application
+
+To run the web application, you need to start both the backend API server and the frontend development server.
+
+1.  **Start the Backend API Server:**
+    Open a terminal and run the following command from the root of the project:
+
+    ```bash
+    dotnet run --project ProcessingGame.WebAPI/ProcessingGame.WebAPI.fsproj
+    ```
+
+    The API server will start and listen on `http://localhost:5250` and `https://localhost:7265`.
+
+2.  **Start the Frontend Development Server:**
+    Open a *new* terminal and navigate to the `processing-game-ui` directory:
+
+    ```bash
+    cd processing-game-ui
+    ```
+
+    Install the dependencies (only needs to be done once):
+
+    ```bash
+    npm install
+    ```
+
+    Then, start the development server:
+
+    ```bash
+    npm run dev
+    ```
+
+    The frontend server will start and be accessible at `http://localhost:5173`.
+
+3.  **Open the Application:**
+    Open your web browser and navigate to `http://localhost:5173`. You should see the game interface and be able to interact with it.

@@ -5,7 +5,7 @@ open ProcessingGame
 open NUnit.Framework
 
 let private env = EnvironmentBuilder.sampleEnv
-let private oneTick = TimeSpan.FromSeconds(1.0)
+let private oneTick = 1
 
 [<SetUp>]
 let Setup () =
