@@ -12,11 +12,9 @@ module EnvironmentBuilder =
         (Seq.initInfinite (fun _ -> Game.emptyProgram()))
         |> Seq.take count
         |> Seq.map (
-            (fun p -> 
-                let rec addAdo p' count =
-                    if count = 0 then p'
-                    else addAdo (Game.programWithAdo (System.Random().Next(1, 5)) p') (count - 1)
-                addAdo p ados)
+            (fun p ->
+                Seq.init ados (fun _ -> System.Random().Next(1, 5))
+                |> Seq.fold (fun p' adoSize -> Game.programWithAdo adoSize p') p)
             >> (fun p -> p.id, p))
         |> Map.ofSeq
 
@@ -25,4 +23,4 @@ module EnvironmentBuilder =
             programs = createPrograms programs ados
             processors = createProcessors processors 1 }
         
-    let sampleEnv = newEnv 3 5 3
+    let sampleEnv = newEnv 5 3 3

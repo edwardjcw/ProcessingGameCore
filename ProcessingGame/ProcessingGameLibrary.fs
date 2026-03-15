@@ -174,21 +174,20 @@ module Game =
             | Some(d), None -> {p with ados=d}
             | _, _ -> p 
         
-        let rec transform amount env =
-            // this is where you tick by one ... if the process is done, then it leaves
-            // the processor if all program's ados are in Waiting status
-            if amount <= 0 then Success env
-            else
-                let processors = env.processors |> Map.map tickProcessor
+        let transform amount env =
+            let tickOnce env' =
+                let processors = env'.processors |> Map.map tickProcessor
                 let newlyDones =
-                    (filteredAdos theWaiters processors) - (filteredAdos theRunners processors) - (filteredAdos theReadies env.programs)
+                    (filteredAdos theWaiters processors) - (filteredAdos theRunners processors) - (filteredAdos theReadies env'.programs)
                     |> Set.toList
-                let nextEnv = 
-                    if newlyDones.IsEmpty then {env with processors=processors; ticks=env.ticks+1}
-                    else
-                        let processors' = processors |> Map.map (fun _ p -> if p.ados.IsEmpty then p else transformDones newlyDones p)
-                        {env with processors=processors'; ticks=env.ticks+1}
-                transform (amount - 1) nextEnv
+                
+                let processors' = 
+                    if newlyDones.IsEmpty then processors
+                    else processors |> Map.map (fun _ p -> if p.ados.IsEmpty then p else transformDones newlyDones p)
+                
+                {env' with processors=processors'; ticks=env'.ticks+1}
+
+            List.fold (fun e _ -> tickOnce e) env [1..amount] |> Success
     
     // ==== constructors, etc.
     let emptyProgram () =
