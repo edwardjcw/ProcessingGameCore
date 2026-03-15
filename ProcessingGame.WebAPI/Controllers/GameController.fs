@@ -15,14 +15,16 @@ type MoveRequest = {
 type GameController () as this =
     inherit ControllerBase()
 
+    let gameState = new GameStateEngine()
+
     [<HttpGet>]
     member _.Get() : IActionResult =
-        this.Ok(GameState.getGameState()) :> IActionResult
+        this.Ok(gameState.GetGameState()) :> IActionResult
 
     [<HttpPost("move")>]
     member _.PostMove([<FromBody>] moveReq: MoveRequest) : IActionResult =
         try
-            let newEnv = GameState.moveAdo moveReq.adoId moveReq.processorId
+            let newEnv = gameState.MoveAdo(moveReq.adoId, moveReq.processorId)
             this.Ok(newEnv) :> IActionResult
         with
         | ex -> this.BadRequest(ex.Message) :> IActionResult
@@ -32,7 +34,15 @@ type GameController () as this =
         try
             if amount <= 0 then
                 failwith "Tick amount must be positive"
-            let newEnv = GameState.tick amount
+            let newEnv = gameState.Tick(amount)
+            this.Ok(newEnv) :> IActionResult
+        with
+        | ex -> this.BadRequest(ex.Message) :> IActionResult
+
+    [<HttpPost("new")>]
+    member _.PostNewGame([<FromBody>] config: GameConfig) : IActionResult =
+        try
+            let newEnv = gameState.NewGame(config)
             this.Ok(newEnv) :> IActionResult
         with
         | ex -> this.BadRequest(ex.Message) :> IActionResult

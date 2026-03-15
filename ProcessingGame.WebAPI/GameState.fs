@@ -3,25 +3,34 @@ namespace ProcessingGame.WebAPI
 open ProcessingGame
 open System
 
-[<RequireQualifiedAccess>]
-module GameState =
+type GameConfig = {
+    programs: int
+    processors: int
+    ados: int
+}
 
-    let private help = "API for ProcessingGame"
-    let private initialEnv = EnvironmentBuilder.sampleEnv
-    let private startResult = Result.Success initialEnv
+type GameStateEngine() =
 
-    let private gameAgent =
-        let agent = MailboxProcessor.Start(GameInterface.play help startResult)
-        agent
+    let help = "API for ProcessingGame"
+    let initialEnv = EnvironmentBuilder.sampleEnv
+    let startResult = Result.Success initialEnv
 
-    let getGameState () =
+    let gameAgent = MailboxProcessor.Start(GameInterface.play help startResult)
+
+    member this.NewGame(config: GameConfig) =
+        let reply = gameAgent.PostAndReply(fun r -> UserRequest.NewGame(config.programs, config.processors, config.ados), r)
+        match reply with
+        | Message.NewGameDone newEnv -> newEnv
+        | _ -> failwith "Unexpected response from game agent after new game"
+
+    member this.GetGameState() =
         let reply = gameAgent.PostAndReply(fun r -> UserRequest.Status, r)
         match reply with
         | Message.Status(_, env) -> env
         | _ -> failwith "Unexpected response from game agent when getting state"
 
-    let moveAdo (adoId: Guid) (processorId: Guid) =
-        let env = getGameState ()
+    member this.MoveAdo(adoId: Guid, processorId: Guid) =
+        let env = this.GetGameState()
         let adoOpt = GameInterface.readyAdoFromId (adoId.ToString()) env
         let processorOpt = GameInterface.processorFromId (processorId.ToString()) env
 
@@ -35,7 +44,7 @@ module GameState =
         | None, _ -> failwith $"Ado with id {adoId} not found or not ready."
         | _, None -> failwith $"Processor with id {processorId} not found."
 
-    let tick (amount: int) =
+    member this.Tick(amount: int) =
         let reply = gameAgent.PostAndReply(fun r -> UserRequest.TickAmount amount, r)
         match reply with
         | Message.TickDone newEnv -> newEnv

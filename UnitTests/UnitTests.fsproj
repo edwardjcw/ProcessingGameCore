@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
 
         <IsPackable>false</IsPackable>
         <GenerateProgramFile>false</GenerateProgramFile>
@@ -10,6 +10,7 @@
 
     <ItemGroup>
         <Compile Include="UnitTest1.fs" />
+        <Compile Include="TickerTests.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
 
@@ -22,6 +23,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ProcessingGame\ProcessingGame.fsproj" />
+      <ProjectReference Include="..\ProcessingGame.WebAPI\ProcessingGame.WebAPI.fsproj" />
     </ItemGroup>
 
 </Project>

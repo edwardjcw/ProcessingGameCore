@@ -5,6 +5,7 @@ open System
 
 [<RequireQualifiedAccess>]
 type UserRequest =
+    | NewGame of int * int * int
     | MoveUsing of Ado * Processor
     | TickAmount of int
     | Exit
@@ -14,6 +15,7 @@ type UserRequest =
 
 [<RequireQualifiedAccess>]    
 type Message =
+    | NewGameDone of ProcessingGame.Environment
     | MoveComplete of ProcessingGame.Environment
     | TickDone of ProcessingGame.Environment
     | ExitReady of string
@@ -43,6 +45,11 @@ module GameInterface =
         let rec looper result = async {
             let! request, reply = input.Receive()
             match request with
+            | UserRequest.NewGame (programs, processors, ados) ->
+                let env' = EnvironmentBuilder.newEnv programs processors ados
+                let result' = Result.Success env'
+                reply.Reply(Message.NewGameDone(env'))
+                do! looper result'
             | UserRequest.Exit -> reply.Reply(Message.ExitReady("done"))
             | UserRequest.MoveUsing(ado, processor) ->
                 let env' = (Game.transform (Request.Move (ado, processor)) (envFromResult result))

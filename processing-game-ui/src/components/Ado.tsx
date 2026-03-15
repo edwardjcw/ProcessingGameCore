@@ -1,5 +1,6 @@
 import { useDrag } from 'react-dnd';
 import type { Ado as AdoType } from '../types';
+import { Paper, Typography, Box, LinearProgress } from '@mui/material';
 
 export const ItemTypes = {
     ADO: 'ado',
@@ -27,18 +28,29 @@ export const Ado: React.FC<AdoProps> = ({ ado, isDraggable, handleDrop }) => {
         }),
     }));
 
+    const progress = (ado.adone / ado.size) * 100;
+
     return (
-        <div
+        <Paper
             ref={drag}
-            style={{
-                border: '1px solid gray',
-                padding: '5px',
-                margin: '5px',
+            elevation={3}
+            data-ado-id={ado.id}
+            className="ado"
+            sx={{
+                padding: 1,
+                margin: 0.5,
                 opacity: isDragging ? 0.5 : 1,
                 cursor: isDraggable ? 'move' : 'default',
+                textAlign: 'center',
+                width: '120px'
             }}
         >
-            Ado: {ado.id.substring(0, 8)} (Size: {ado.size})
-        </div>
+            <Typography variant="body2">Ado: {ado.id.substring(0, 4)}</Typography>
+            <Box sx={{ width: '100%', mt: 1 }}>
+                <LinearProgress variant="determinate" value={progress} />
+            </Box>
+            <Typography variant="caption">{ado.adone} / {ado.size}</Typography>
+        </Paper>
     );
 };
+

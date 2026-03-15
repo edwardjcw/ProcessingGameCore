@@ -58,6 +58,7 @@ module GamePlay =
             match result with
             | Message.Error(m, e) | Message.Status(m, e) | Message.Help(m, e) -> printfn $"{m}"; looper e
             | Message.TickDone e | Message.MoveComplete e -> printfn "Operation complete"; looper e
+            | Message.NewGameDone e -> printfn "New game created"; looper e
             | Message.ExitReady m -> printfn $"{m}"; ()
         looper env
         

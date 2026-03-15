@@ -35,7 +35,6 @@ module Program =
 
         let app = builder.Build()
 
-        app.UseHttpsRedirection()
 
         app.UseCors(MyAllowSpecificOrigins)
 
