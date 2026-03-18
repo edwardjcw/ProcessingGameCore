@@ -2,19 +2,25 @@
 
 [<RequireQualifiedAccess>]
 module EnvironmentBuilder =
-    let private processors =
-        (Seq.initInfinite (fun _ -> Game.emptyProcessor 10 1))
-        |> Seq.take 5
+    let private createProcessors count power =
+        (Seq.initInfinite (fun _ -> Game.emptyProcessor 10 power))
+        |> Seq.take count
         |> Seq.map (fun p -> (p.id, p))
         |> Map.ofSeq
-        
-    let private programs =
+
+    let private createPrograms count ados =
         (Seq.initInfinite (fun _ -> Game.emptyProgram()))
-        |> Seq.take 3
+        |> Seq.take count
         |> Seq.map (
-            (Game.programWithAdo 2)
-            >> (Game.programWithAdo 3)
+            (fun p ->
+                Seq.init ados (fun _ -> System.Random().Next(1, 5))
+                |> Seq.fold (fun p' adoSize -> Game.programWithAdo adoSize p') p)
             >> (fun p -> p.id, p))
         |> Map.ofSeq
+
+    let newEnv programs processors ados =
+        { Game.emptyEnvironment with
+            programs = createPrograms programs ados
+            processors = createProcessors processors 1 }
         
-    let sampleEnv = {Game.emptyEnvironment with programs=programs; processors=processors}
+    let sampleEnv = newEnv 5 3 3

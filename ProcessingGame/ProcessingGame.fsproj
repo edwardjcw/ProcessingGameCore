@@ -7,8 +7,8 @@
 
   <ItemGroup>
     <Compile Include="ProcessingGameLibrary.fs" />
-    <Compile Include="ProcessingGameInterface.fs" />
     <Compile Include="EnvironmentBuilder.fs" />
+    <Compile Include="ProcessingGameInterface.fs" />
     <Compile Include="GamePlay.fs" />
   </ItemGroup>
 

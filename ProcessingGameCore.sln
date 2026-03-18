@@ -12,6 +12,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ProcessingGame", "Processin
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "UnitTests", "UnitTests\UnitTests.fsproj", "{A1469FBE-BFDC-44F1-8DBB-C1264142A5FB}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ProcessingGame.WebAPI", "ProcessingGame.WebAPI\ProcessingGame.WebAPI.fsproj", "{7BC0FD7C-E72E-4BC6-BEC0-342EC31997AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,10 @@ Global
 		{A1469FBE-BFDC-44F1-8DBB-C1264142A5FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1469FBE-BFDC-44F1-8DBB-C1264142A5FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1469FBE-BFDC-44F1-8DBB-C1264142A5FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BC0FD7C-E72E-4BC6-BEC0-342EC31997AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BC0FD7C-E72E-4BC6-BEC0-342EC31997AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BC0FD7C-E72E-4BC6-BEC0-342EC31997AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BC0FD7C-E72E-4BC6-BEC0-342EC31997AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
