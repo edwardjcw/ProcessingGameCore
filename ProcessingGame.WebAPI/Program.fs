@@ -31,6 +31,7 @@ module Program =
             )
         )
 
+        builder.Services.AddSingleton<GameStateEngine>() |> ignore
         builder.Services.AddControllers().AddNewtonsoftJson() |> ignore
 
         let app = builder.Build()

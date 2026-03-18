@@ -7,8 +7,8 @@ interface NewGameProps {
 
 export const NewGame: React.FC<NewGameProps> = ({ onNewGame }) => {
     const [open, setOpen] = useState(false);
-    const [programs, setPrograms] = useState(3);
-    const [processors, setProcessors] = useState(5);
+    const [programs, setPrograms] = useState(5);
+    const [processors, setProcessors] = useState(3);
     const [ados, setAdos] = useState(3);
 
     const handleClickOpen = () => {

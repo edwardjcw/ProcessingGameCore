@@ -64,13 +64,13 @@ export const Game: React.FC<GameProps> = ({ environment, setEnvironment, fetchEn
                 </Box>
             </Box>
             <Grid container spacing={2}>
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                     <Typography variant="h5">Programs</Typography>
                     {Object.values(environment.programs).map((program) => (
                         <Program key={program.id} program={program} handleDrop={handleDrop} />
                     ))}
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                     <Typography variant="h5">Processors</Typography>
                     {Object.values(environment.processors).map((processor) => (
                         <Processor key={processor.id} processor={processor} />

@@ -12,17 +12,15 @@ type MoveRequest = {
 
 [<ApiController>]
 [<Route("api/game")>]
-type GameController () as this =
+type GameController (gameState: GameStateEngine) =
     inherit ControllerBase()
 
-    let gameState = new GameStateEngine()
-
     [<HttpGet>]
-    member _.Get() : IActionResult =
+    member this.Get() : IActionResult =
         this.Ok(gameState.GetGameState()) :> IActionResult
 
     [<HttpPost("move")>]
-    member _.PostMove([<FromBody>] moveReq: MoveRequest) : IActionResult =
+    member this.PostMove([<FromBody>] moveReq: MoveRequest) : IActionResult =
         try
             let newEnv = gameState.MoveAdo(moveReq.adoId, moveReq.processorId)
             this.Ok(newEnv) :> IActionResult
@@ -30,7 +28,7 @@ type GameController () as this =
         | ex -> this.BadRequest(ex.Message) :> IActionResult
 
     [<HttpPost("tick")>]
-    member _.PostTick([<FromBody>] amount: int) : IActionResult =
+    member this.PostTick([<FromBody>] amount: int) : IActionResult =
         try
             if amount <= 0 then
                 failwith "Tick amount must be positive"
@@ -40,7 +38,7 @@ type GameController () as this =
         | ex -> this.BadRequest(ex.Message) :> IActionResult
 
     [<HttpPost("new")>]
-    member _.PostNewGame([<FromBody>] config: GameConfig) : IActionResult =
+    member this.PostNewGame([<FromBody>] config: GameConfig) : IActionResult =
         try
             let newEnv = gameState.NewGame(config)
             this.Ok(newEnv) :> IActionResult
